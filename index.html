@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinder PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        body { background: #0f172a; color: white; font-family: sans-serif; }
+        .tab-content { display: none; }
+        .active-tab { display: block; }
+        .progress-bar { transition: width 0.5s ease-in-out; }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Header -->
+    <header class="p-6 border-b border-slate-800 flex justify-between items-center">
+        <h1 class="text-2xl font-bold tracking-tight text-blue-400">PATHFINDER</h1>
+        <button onclick="openGoalModal()" class="bg-blue-600 p-2 rounded-full hover:bg-blue-500">
+            <i data-lucide="plus"></i>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="p-4 max-w-2xl mx-auto">
+        
+        <!-- Tab: Goals -->
+        <section id="goals-view" class="tab-content active-tab">
+            <h2 class="text-lg font-semibold mb-4 text-slate-400">Current Ambitions</h2>
+            <div id="goals-list" class="space-y-4">
+                <!-- Goals injected here -->
+            </div>
+        </section>
+
+        <!-- Tab: Vision Board -->
+        <section id="vision-view" class="tab-content">
+            <h2 class="text-lg font-semibold mb-4 text-slate-400">Vision Board (9 Slots)</h2>
+            <div id="vision-grid" class="grid grid-cols-3 gap-2 aspect-square w-full">
+                <!-- 9 Slots injected here -->
+            </div>
+        </section>
+
+        <!-- Tab: Rewards -->
+        <section id="rewards-view" class="tab-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-slate-400">Treasury</h2>
+                <button onclick="openRewardModal()" class="text-sm bg-slate-700 px-3 py-1 rounded">Add Reward</button>
+            </div>
+            <div id="rewards-list" class="grid grid-cols-1 gap-3">
+                <!-- Rewards injected here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 glass border-t border-slate-800 flex justify-around p-4">
+        <button onclick="switchTab('goals-view')" class="flex flex-col items-center text-blue-400">
+            <i data-lucide="target"></i><span class="text-xs">Goals</span>
+        </button>
+        <button onclick="switchTab('vision-view')" class="flex flex-col items-center text-slate-400">
+            <i data-lucide="layout-grid"></i><span class="text-xs">Vision</span>
+        </button>
+        <button onclick="switchTab('rewards-view')" class="flex flex-col items-center text-slate-400">
+            <i data-lucide="gift"></i><span class="text-xs">Rewards</span>
+        </button>
+    </nav>
+
+    <!-- Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>
