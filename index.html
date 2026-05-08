@@ -7,100 +7,194 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --soft-purple: #f3e8ff;
-            --deep-purple: #9333ea;
-            --accent-gold: #d4af37;
-            --glass: rgba(255, 255, 255, 0.7);
-        }
-
-        body {
-            background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 50%, #e0e7ff 100%);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #4b2c6d;
-            min-height: 100vh;
-        }
-
+        :root { --soft-purple: #f3e8ff; --deep-purple: #9333ea; --glass: rgba(255, 255, 255, 0.8); }
+        body { background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; color: #4b2c6d; }
         .cursive { font-family: 'Dancing Script', cursive; }
-
-        .glo-card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(147, 51, 234, 0.07);
-        }
-
-        .btn-primary {
-            background: linear-gradient(to right, #a855f7, #7c3aed);
-            color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-        }
-
-        .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
-
-        .vision-slot {
-            aspect-ratio: 1 / 1;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #fff;
-            border: 2px dashed #d8b4fe;
-            transition: transform 0.2s;
-        }
-
-        .vision-slot:hover { transform: scale(1.02); }
-
-        .streak-fire {
-            filter: drop-shadow(0 0 5px #fbbf24);
-            animation: glow 2s infinite alternate;
-        }
-
-        @keyframes glow {
-            from { filter: drop-shadow(0 0 2px #fbbf24); }
-            to { filter: drop-shadow(0 0 8px #f59e0b); }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #d8b4fe; border-radius: 10px; }
+        .glo-card { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px; box-shadow: 0 8px 32px rgba(147, 51, 234, 0.05); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(75, 44, 109, 0.4); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .vision-slot { aspect-ratio: 1/1; border-radius: 16px; background: white; border: 2px dashed #d8b4fe; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     </style>
 </head>
-<body class="p-4 pb-28">
+<body class="p-4 pb-32">
 
-    <header class="text-center mb-8 pt-6">
+    <header class="text-center py-8">
         <h1 class="cursive text-5xl text-purple-800 mb-1">GloApp ✨</h1>
-        <p class="text-sm tracking-widest uppercase opacity-70">becoming my highest self 🏹</p>
-        <div class="mt-6 glo-card p-6 mx-auto max-w-lg italic text-lg">
-            "Discipline today, freedom tomorrow. ☁️"
-        </div>
+        <p class="text-sm tracking-widest uppercase opacity-60">Discipline today, freedom tomorrow 🏹</p>
     </header>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-        <div class="glo-card p-4 text-center">
-            <p class="text-xs uppercase opacity-60">Streak</p>
-            <p class="text-2xl font-bold">7 <span class="streak-fire">🔥</span></p>
-        </div>
-        <div class="glo-card p-4 text-center">
-            <p class="text-xs uppercase opacity-60">Success</p>
-            <p class="text-2xl font-bold">78% 🪄</p>
-        </div>
-        <div class="glo-card p-4 text-center">
-            <p class="text-xs uppercase opacity-60">Check-ins</p>
-            <p class="text-2xl font-bold">45 📖</p>
-        </div>
-        <div class="glo-card p-4 text-center">
-            <p class="text-xs uppercase opacity-60">Longest</p>
-            <p class="text-2xl font-bold">14 🏆</p>
+    <div class="max-w-2xl mx-auto space-y-8">
+        
+        <section>
+            <div class="flex justify-between items-end mb-4 px-2">
+                <h2 class="text-2xl font-semibold">Today's Focus ☁️</h2>
+                <button onclick="openModal('goal-modal')" class="text-sm bg-purple-600 text-white px-4 py-1 rounded-full shadow-lg hover:scale-105 transition">+ New Goal</button>
+            </div>
+            <div id="goals-list" class="space-y-4">
+                </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-semibold mb-4 px-2">Vision Board 🎀</h2>
+            <div id="vision-grid" class="grid grid-cols-3 gap-3"></div>
+        </section>
+
+        <section>
+            <div class="flex justify-between items-end mb-4 px-2">
+                <h2 class="text-2xl font-semibold">Treasury 🎁</h2>
+                <button onclick="openModal('reward-modal')" class="text-sm bg-pink-500 text-white px-4 py-1 rounded-full shadow-lg hover:scale-105 transition">Add Reward</button>
+            </div>
+            <div id="rewards-list" class="grid grid-cols-1 gap-3"></div>
+        </section>
+    </div>
+
+    <div id="goal-modal" class="modal p-4">
+        <div class="glo-card p-6 w-full max-w-md bg-white">
+            <h3 class="text-xl font-bold mb-4">New Ambition ✨</h3>
+            <input id="goal-name" type="text" placeholder="Goal Name (e.g. Yoga)" class="w-full p-3 rounded-xl border border-purple-100 mb-3 outline-none">
+            <input id="goal-duration" type="number" placeholder="Duration (Days)" class="w-full p-3 rounded-xl border border-purple-100 mb-3 outline-none">
+            <select id="goal-reward" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none">
+                <option value="">Choose a reward...</option>
+            </select>
+            <div class="flex gap-2">
+                <button onclick="saveGoal()" class="flex-1 bg-purple-600 text-white py-3 rounded-xl font-bold">Create</button>
+                <button onclick="closeModal('goal-modal')" class="flex-1 bg-slate-100 py-3 rounded-xl">Cancel</button>
+            </div>
         </div>
     </div>
 
-    <main class="max-w-4xl mx-auto space-y-8">
-        
-        <section id="goals-view">
-            <div class="flex justify-between items-end mb-4 px-2">
-                <h2 class="text-2xl font-semibold">Today's Focus ☁️</h2>
-                <button onclick="toggleModal('goal-modal')" class="text-sm text-purple-600 font-bold">+ New Goal</button>
+    <div id="reward-modal" class="modal p-4">
+        <div class="glo-card p-6 w-full max-w-md bg-white">
+            <h3 class="text-xl font-bold mb-4">New Reward 🎁</h3>
+            <input id="reward-name" type="text" placeholder="Reward Name (e.g. Spa Day)" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none">
+            <div class="flex gap-2">
+                <button onclick="saveReward()" class="flex-1 bg-pink-500 text-white py-3 rounded-xl font-bold">Add</button>
+                <button onclick="closeModal('reward-modal')" class="flex-1 bg-slate-100 py-3 rounded-xl">Cancel</button>
             </div>
-            <div id="goals-list" class="space-y-4">
-                <div class="glo-card p
+        </div>
+    </div>
+
+    <script>
+        // State
+        let goals = JSON.parse(localStorage.getItem('glo_goals')) || [];
+        let rewards = JSON.parse(localStorage.getItem('glo_rewards')) || [];
+        let vision = JSON.parse(localStorage.getItem('glo_vision')) || Array(9).fill(null);
+
+        // UI Handlers
+        function openModal(id) { 
+            document.getElementById(id).classList.add('active'); 
+            if(id === 'goal-modal') updateRewardDropdown();
+        }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function updateRewardDropdown() {
+            const select = document.getElementById('goal-reward');
+            select.innerHTML = '<option value="">No reward</option>' + 
+                rewards.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+        }
+
+        // Logic: Save Data
+        function saveGoal() {
+            const name = document.getElementById('goal-name').value;
+            const duration = document.getElementById('goal-duration').value;
+            const rewardId = document.getElementById('goal-reward').value;
+            if(!name || !duration) return alert("Please fill in the name and days! ✨");
+
+            goals.push({
+                id: Date.now().toString(),
+                name, duration, rewardId,
+                currentStreak: 0,
+                logs: []
+            });
+            saveAndRefresh();
+            closeModal('goal-modal');
+        }
+
+        function saveReward() {
+            const name = document.getElementById('reward-name').value;
+            if(!name) return;
+            rewards.push({ id: Date.now().toString(), name });
+            saveAndRefresh();
+            closeModal('reward-modal');
+        }
+
+        // Logic: Tracking
+        function logActivity(goalId, isYesterday = false) {
+            const goal = goals.find(g => g.id === goalId);
+            const date = new Date();
+            if(isYesterday) date.setDate(date.getDate() - 1);
+            const dateStr = date.toISOString().split('T')[0];
+
+            if(goal.logs.includes(dateStr)) return;
+
+            // Reset Rule
+            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+            const yestStr = yesterday.toISOString().split('T')[0];
+            if(!isYesterday && !goal.logs.includes(yestStr) && goal.logs.length > 0) {
+                alert("Yesterday was missed! Streak reset. 🕯️");
+                goal.currentStreak = 0;
+            }
+
+            goal.logs.push(dateStr);
+            goal.currentStreak++;
+            saveAndRefresh();
+        }
+
+        function deleteGoal(id) { goals = goals.filter(g => g.id !== id); saveAndRefresh(); }
+        function deleteReward(id) { rewards = rewards.filter(r => r.id !== id); saveAndRefresh(); }
+
+        function saveAndRefresh() {
+            localStorage.setItem('glo_goals', JSON.stringify(goals));
+            localStorage.setItem('glo_rewards', JSON.stringify(rewards));
+            localStorage.setItem('glo_vision', JSON.stringify(vision));
+            renderAll();
+        }
+
+        function renderAll() {
+            // Render Goals
+            document.getElementById('goals-list').innerHTML = goals.map(g => {
+                const reward = rewards.find(r => r.id === g.rewardId)?.name || "No reward";
+                const progress = (g.currentStreak / g.duration) * 100;
+                return `
+                <div class="glo-card p-5">
+                    <div class="flex justify-between mb-2">
+                        <h3 class="font-bold text-purple-900">${g.name}</h3>
+                        <span class="text-xs font-bold bg-purple-100 px-2 py-1 rounded-lg">${g.currentStreak}/${g.duration}d</span>
+                    </div>
+                    <div class="w-full bg-purple-50 h-2 rounded-full mb-3"><div class="bg-purple-500 h-full rounded-full" style="width:${Math.min(progress, 100)}%"></div></div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] text-pink-500">🎁 ${reward}</span>
+                        <div class="flex gap-2">
+                            <button onclick="logActivity('${g.id}', true)" class="text-[10px] bg-white border px-2 py-1 rounded">Log Yesterday</button>
+                            <button onclick="logActivity('${g.id}')" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-full">Done Today</button>
+                            <button onclick="deleteGoal('${g.id}')" class="text-xs opacity-30">🗑️</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Render Rewards
+            document.getElementById('rewards-list').innerHTML = rewards.map(r => `
+                <div class="glo-card p-3 flex justify-between items-center">
+                    <span>🎀 ${r.name}</span>
+                    <button onclick="deleteReward('${r.id}')" class="text-xs opacity-50">Remove</button>
+                </div>
+            `).join('');
+
+            // Render Vision
+            document.getElementById('vision-grid').innerHTML = vision.map((img, i) => `
+                <div onclick="setVision(${i})" class="vision-slot">
+                    ${img ? `<img src="${img}" class="w-full h-full object-cover">` : '✨'}
+                </div>
+            `).join('');
+        }
+
+        function setVision(i) {
+            const url = prompt("Paste an image URL (Pinterest/Unsplash link):");
+            if(url) { vision[i] = url; saveAndRefresh(); }
+        }
+
+        renderAll();
+    </script>
+</body>
+</html>
