@@ -7,20 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --soft-purple: #f3e8ff; --deep-purple: #9333ea; --glass: rgba(255, 255, 255, 0.8); }
+        :root { --soft-purple: #f3e8ff; --deep-purple: #9333ea; --glass: rgba(255, 255, 255, 0.85); }
         body { background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; color: #4b2c6d; }
         .cursive { font-family: 'Dancing Script', cursive; }
         .glo-card { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px; box-shadow: 0 8px 32px rgba(147, 51, 234, 0.05); }
         .modal { display: none; position: fixed; inset: 0; background: rgba(75, 44, 109, 0.4); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
         .vision-slot { aspect-ratio: 1/1; border-radius: 16px; background: white; border: 2px dashed #d8b4fe; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5) sepia(1) saturate(5) hue-rotate(240deg); }
     </style>
 </head>
 <body class="p-4 pb-32">
 
     <header class="text-center py-8">
         <h1 class="cursive text-5xl text-purple-800 mb-1">GloApp ✨</h1>
-        <p class="text-sm tracking-widest uppercase opacity-60">Discipline today, freedom tomorrow 🏹</p>
+        <p class="text-sm tracking-widest uppercase opacity-60 italic">it's already yours</p>
     </header>
 
     <div class="max-w-2xl mx-auto space-y-8">
@@ -28,10 +29,9 @@
         <section>
             <div class="flex justify-between items-end mb-4 px-2">
                 <h2 class="text-2xl font-semibold">Today's Focus ☁️</h2>
-                <button onclick="openModal('goal-modal')" class="text-sm bg-purple-600 text-white px-4 py-1 rounded-full shadow-lg hover:scale-105 transition">+ New Goal</button>
+                <button onclick="openModal('goal-modal')" class="text-sm bg-purple-600 text-white px-4 py-1 rounded-full shadow-lg">+ New Goal</button>
             </div>
-            <div id="goals-list" class="space-y-4">
-                </div>
+            <div id="goals-list" class="space-y-4"></div>
         </section>
 
         <section>
@@ -42,20 +42,32 @@
         <section>
             <div class="flex justify-between items-end mb-4 px-2">
                 <h2 class="text-2xl font-semibold">Treasury 🎁</h2>
-                <button onclick="openModal('reward-modal')" class="text-sm bg-pink-500 text-white px-4 py-1 rounded-full shadow-lg hover:scale-105 transition">Add Reward</button>
+                <button onclick="openModal('reward-modal')" class="text-sm bg-pink-500 text-white px-4 py-1 rounded-full shadow-lg">Add Reward</button>
             </div>
             <div id="rewards-list" class="grid grid-cols-1 gap-3"></div>
         </section>
     </div>
 
+    <div id="edit-reward-modal" class="modal p-4">
+        <div class="glo-card p-6 w-full max-w-md bg-white">
+            <h3 class="text-xl font-bold mb-4">Assign Reward 🎀</h3>
+            <p id="edit-goal-name" class="mb-4 text-sm opacity-60"></p>
+            <input type="hidden" id="edit-reward-goal-id">
+            <select id="update-reward-select" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none">
+                </select>
+            <div class="flex gap-2">
+                <button onclick="updateGoalReward()" class="flex-1 bg-purple-600 text-white py-3 rounded-xl font-bold">Save Change</button>
+                <button onclick="closeModal('edit-reward-modal')" class="flex-1 bg-slate-100 py-3 rounded-xl">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div id="goal-modal" class="modal p-4">
         <div class="glo-card p-6 w-full max-w-md bg-white">
             <h3 class="text-xl font-bold mb-4">New Ambition ✨</h3>
-            <input id="goal-name" type="text" placeholder="Goal Name (e.g. Yoga)" class="w-full p-3 rounded-xl border border-purple-100 mb-3 outline-none">
+            <input id="goal-name" type="text" placeholder="Goal Name" class="w-full p-3 rounded-xl border border-purple-100 mb-3 outline-none">
             <input id="goal-duration" type="number" placeholder="Duration (Days)" class="w-full p-3 rounded-xl border border-purple-100 mb-3 outline-none">
-            <select id="goal-reward" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none">
-                <option value="">Choose a reward...</option>
-            </select>
+            <select id="goal-reward" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none"></select>
             <div class="flex gap-2">
                 <button onclick="saveGoal()" class="flex-1 bg-purple-600 text-white py-3 rounded-xl font-bold">Create</button>
                 <button onclick="closeModal('goal-modal')" class="flex-1 bg-slate-100 py-3 rounded-xl">Cancel</button>
@@ -75,37 +87,77 @@
     </div>
 
     <script>
-        // State
         let goals = JSON.parse(localStorage.getItem('glo_goals')) || [];
         let rewards = JSON.parse(localStorage.getItem('glo_rewards')) || [];
         let vision = JSON.parse(localStorage.getItem('glo_vision')) || Array(9).fill(null);
 
-        // UI Handlers
         function openModal(id) { 
             document.getElementById(id).classList.add('active'); 
-            if(id === 'goal-modal') updateRewardDropdown();
+            if(id === 'goal-modal') updateRewardDropdown('goal-reward');
         }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function updateRewardDropdown() {
-            const select = document.getElementById('goal-reward');
-            select.innerHTML = '<option value="">No reward</option>' + 
+        function updateRewardDropdown(id) {
+            const select = document.getElementById(id);
+            select.innerHTML = '<option value="">Choose a reward...</option>' + 
                 rewards.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
         }
 
-        // Logic: Save Data
+        // --- Reward Edit Logic ---
+        function openEditReward(goalId) {
+            const goal = goals.find(g => g.id === goalId);
+            document.getElementById('edit-reward-goal-id').value = goalId;
+            document.getElementById('edit-goal-name').innerText = `Goal: ${goal.name}`;
+            updateRewardDropdown('update-reward-select');
+            document.getElementById('update-reward-select').value = goal.rewardId;
+            openModal('edit-reward-modal');
+        }
+
+        function updateGoalReward() {
+            const goalId = document.getElementById('edit-reward-goal-id').value;
+            const rewardId = document.getElementById('update-reward-select').value;
+            const goal = goals.find(g => g.id === goalId);
+            goal.rewardId = rewardId;
+            saveAndRefresh();
+            closeModal('edit-reward-modal');
+        }
+
+        // --- Logging Logic ---
+        function logCustomDate(goalId) {
+            const dateInput = document.getElementById(`date-${goalId}`);
+            const dateStr = dateInput.value;
+            if(!dateStr) return alert("Select a date first! 🎀");
+            
+            const goal = goals.find(g => g.id === goalId);
+            if(goal.logs.includes(dateStr)) return alert("Already logged for this day!");
+
+            // Strict Reset Logic: 
+            // If the date being logged is newer than the last log, check if they are consecutive
+            if (goal.logs.length > 0) {
+                const sortedLogs = [...goal.logs].sort();
+                const lastLog = new Date(sortedLogs[sortedLogs.length - 1]);
+                const newLog = new Date(dateStr);
+                const diffTime = Math.abs(newLog - lastLog);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays > 1 && newLog > lastLog) {
+                    alert("Oh no! Missed days detected. Streak resets to 0. ✨");
+                    goal.currentStreak = 0;
+                }
+            }
+
+            goal.logs.push(dateStr);
+            goal.currentStreak++;
+            saveAndRefresh();
+        }
+
+        // --- Data Persistence ---
         function saveGoal() {
             const name = document.getElementById('goal-name').value;
             const duration = document.getElementById('goal-duration').value;
             const rewardId = document.getElementById('goal-reward').value;
-            if(!name || !duration) return alert("Please fill in the name and days! ✨");
-
-            goals.push({
-                id: Date.now().toString(),
-                name, duration, rewardId,
-                currentStreak: 0,
-                logs: []
-            });
+            if(!name || !duration) return;
+            goals.push({ id: Date.now().toString(), name, duration, rewardId, currentStreak: 0, logs: [] });
             saveAndRefresh();
             closeModal('goal-modal');
         }
@@ -118,30 +170,13 @@
             closeModal('reward-modal');
         }
 
-        // Logic: Tracking
-        function logActivity(goalId, isYesterday = false) {
-            const goal = goals.find(g => g.id === goalId);
-            const date = new Date();
-            if(isYesterday) date.setDate(date.getDate() - 1);
-            const dateStr = date.toISOString().split('T')[0];
-
-            if(goal.logs.includes(dateStr)) return;
-
-            // Reset Rule
-            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-            const yestStr = yesterday.toISOString().split('T')[0];
-            if(!isYesterday && !goal.logs.includes(yestStr) && goal.logs.length > 0) {
-                alert("Yesterday was missed! Streak reset. 🕯️");
-                goal.currentStreak = 0;
-            }
-
-            goal.logs.push(dateStr);
-            goal.currentStreak++;
-            saveAndRefresh();
-        }
-
         function deleteGoal(id) { goals = goals.filter(g => g.id !== id); saveAndRefresh(); }
-        function deleteReward(id) { rewards = rewards.filter(r => r.id !== id); saveAndRefresh(); }
+        function deleteReward(id) { 
+            rewards = rewards.filter(r => r.id !== id); 
+            // Also remove from any goals using it
+            goals.forEach(g => { if(g.rewardId === id) g.rewardId = ""; });
+            saveAndRefresh(); 
+        }
 
         function saveAndRefresh() {
             localStorage.setItem('glo_goals', JSON.stringify(goals));
@@ -151,9 +186,8 @@
         }
 
         function renderAll() {
-            // Render Goals
             document.getElementById('goals-list').innerHTML = goals.map(g => {
-                const reward = rewards.find(r => r.id === g.rewardId)?.name || "No reward";
+                const reward = rewards.find(r => r.id === g.rewardId)?.name || "Set a reward ✨";
                 const progress = (g.currentStreak / g.duration) * 100;
                 return `
                 <div class="glo-card p-5">
@@ -161,36 +195,38 @@
                         <h3 class="font-bold text-purple-900">${g.name}</h3>
                         <span class="text-xs font-bold bg-purple-100 px-2 py-1 rounded-lg">${g.currentStreak}/${g.duration}d</span>
                     </div>
-                    <div class="w-full bg-purple-50 h-2 rounded-full mb-3"><div class="bg-purple-500 h-full rounded-full" style="width:${Math.min(progress, 100)}%"></div></div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] text-pink-500">🎁 ${reward}</span>
-                        <div class="flex gap-2">
-                            <button onclick="logActivity('${g.id}', true)" class="text-[10px] bg-white border px-2 py-1 rounded">Log Yesterday</button>
-                            <button onclick="logActivity('${g.id}')" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-full">Done Today</button>
-                            <button onclick="deleteGoal('${g.id}')" class="text-xs opacity-30">🗑️</button>
+                    <div class="w-full bg-purple-50 h-2 rounded-full mb-3 overflow-hidden">
+                        <div class="bg-gradient-to-r from-purple-400 to-pink-400 h-full rounded-full transition-all duration-700" style="width:${Math.min(progress, 100)}%"></div>
+                    </div>
+                    <div class="flex flex-wrap justify-between items-center gap-2">
+                        <button onclick="openEditReward('${g.id}')" class="text-[10px] text-pink-500 hover:bg-pink-50 px-2 py-1 rounded-lg border border-pink-100">
+                            🎁 ${reward}
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="date-${g.id}" class="text-[10px] bg-white border p-1 rounded-lg outline-none">
+                            <button onclick="logCustomDate('${g.id}')" class="text-xs bg-purple-600 text-white px-3 py-1.5 rounded-full shadow-sm hover:bg-purple-700">Log Date</button>
+                            <button onclick="deleteGoal('${g.id}')" class="text-xs grayscale hover:grayscale-0">🗑️</button>
                         </div>
                     </div>
                 </div>`;
             }).join('');
 
-            // Render Rewards
             document.getElementById('rewards-list').innerHTML = rewards.map(r => `
-                <div class="glo-card p-3 flex justify-between items-center">
-                    <span>🎀 ${r.name}</span>
-                    <button onclick="deleteReward('${r.id}')" class="text-xs opacity-50">Remove</button>
+                <div class="glo-card p-4 flex justify-between items-center animate-in fade-in">
+                    <span class="font-medium text-purple-800">🎀 ${r.name}</span>
+                    <button onclick="deleteReward('${r.id}')" class="text-xs text-red-400 bg-red-50 px-2 py-1 rounded-lg">Delete</button>
                 </div>
             `).join('');
 
-            // Render Vision
             document.getElementById('vision-grid').innerHTML = vision.map((img, i) => `
-                <div onclick="setVision(${i})" class="vision-slot">
-                    ${img ? `<img src="${img}" class="w-full h-full object-cover">` : '✨'}
+                <div onclick="setVision(${i})" class="vision-slot shadow-inner">
+                    ${img ? `<img src="${img}" class="w-full h-full object-cover">` : '<span class="text-purple-200">✨</span>'}
                 </div>
             `).join('');
         }
 
         function setVision(i) {
-            const url = prompt("Paste an image URL (Pinterest/Unsplash link):");
+            const url = prompt("Paste an image URL:");
             if(url) { vision[i] = url; saveAndRefresh(); }
         }
 
