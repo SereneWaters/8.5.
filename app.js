@@ -1,5 +1,5 @@
 // --- State Management ---
-// Using 'glo_' prefix to ensure clean data for the new aesthetic version
+// Using 'glo_' prefix for the aesthetic version data
 let goals = JSON.parse(localStorage.getItem('glo_goals')) || [];
 let rewards = JSON.parse(localStorage.getItem('glo_rewards')) || [];
 let vision = JSON.parse(localStorage.getItem('glo_vision')) || Array(9).fill(null);
@@ -84,7 +84,7 @@ function logCustomDate(goalId) {
     const goal = goals.find(g => g.id === goalId);
     if(goal.logs.includes(dateStr)) return alert("Already logged for this day!");
 
-    // Strict Reset Logic: 
+    // Reset Logic: If logging a new date, check for a gap
     if (goal.logs.length > 0) {
         const sortedLogs = [...goal.logs].sort();
         const lastLogDate = new Date(sortedLogs[sortedLogs.length - 1]);
@@ -93,9 +93,9 @@ function logCustomDate(goalId) {
         const diffTime = newLogDate - lastLogDate;
         const diffDays = diffTime / (1000 * 60 * 60 * 24);
         
-        // If there's a gap of more than 1 day and the new log is in the future relative to last log
+        // If there's a gap of more than 1 day and the new log is after the last log
         if (diffDays > 1) {
-            alert("Gap detected! Streak reset to 0. You've got this! ✨");
+            alert("Gap detected! Streak reset to 0. Discipline is key! ✨");
             goal.currentStreak = 0;
         }
     }
@@ -104,7 +104,8 @@ function logCustomDate(goalId) {
     goal.currentStreak++;
     
     if (goal.currentStreak >= goal.duration) {
-        alert(`🏆 Goal Finished! Time for your reward!`);
+        const reward = rewards.find(r => r.id === goal.rewardId);
+        alert(`🏆 Goal Finished! Time to enjoy: ${reward ? reward.name : 'your success'}! ✨`);
     }
     
     saveAndRender();
@@ -119,6 +120,7 @@ function deleteGoal(id) {
 
 function deleteReward(id) {
     rewards = rewards.filter(r => r.id !== id);
+    // Remove from any goals using this reward
     goals.forEach(g => { if(g.rewardId === id) g.rewardId = ""; });
     saveAndRender();
 }
@@ -126,7 +128,7 @@ function deleteReward(id) {
 // --- Vision Board Logic ---
 
 function updateVision(index) {
-    const url = prompt("Paste Pinterest Image URL:");
+    const url = prompt("Paste Pinterest/Image URL for this slot:");
     if (url) {
         vision[index] = url;
         saveAndRender();
@@ -141,20 +143,36 @@ function renderGoals() {
 
     container.innerHTML = goals.map(goal => {
         const progress = (goal.currentStreak / goal.duration) * 100;
-        const reward = rewards.find(r => r.id === goal.rewardId)?.name || "Set Reward ✨";
+        const rewardName = rewards.find(r => r.id === goal.rewardId)?.name || "Assign Reward ✨";
         
+        // Visual Chart Logic: Create dots for the goal duration
+        let calendarDots = "";
+        for (let i = 1; i <= goal.duration; i++) {
+            const isDone = i <= goal.currentStreak;
+            calendarDots += `
+                <div class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold transition-all duration-500
+                    ${isDone ? 'bg-purple-500 text-white shadow-sm' : 'bg-purple-50 text-purple-200 border border-purple-100'}">
+                    ${isDone ? '✨' : i}
+                </div>
+            `;
+        }
+
         return `
-            <div class="glo-card">
+            <div class="glo-card p-5 mb-4 animate-in fade-in">
                 <div class="flex justify-between items-start mb-3">
                     <div>
-                        <h3 class="font-bold text-lg text-purple-900">${goal.name}</h3>
-                        <span onclick="openEditRewardUI('${goal.id}')" class="text-[10px] text-pink-500 cursor-pointer hover:underline">
-                            🎁 ${reward}
+                        <h3 class="font-bold text-lg text-purple-900 leading-tight">${goal.name}</h3>
+                        <span onclick="openEditRewardUI('${goal.id}')" class="text-[10px] text-pink-500 cursor-pointer hover:underline italic">
+                            🎁 ${rewardName}
                         </span>
                     </div>
                     <div class="text-right">
-                        <span class="text-sm font-bold text-purple-500">${goal.currentStreak}/${goal.duration}d</span>
+                        <span class="text-xs font-bold text-purple-400 tracking-tighter">${goal.currentStreak}/${goal.duration}d</span>
                     </div>
+                </div>
+
+                <div class="flex flex-wrap gap-1.5 mb-4">
+                    ${calendarDots}
                 </div>
 
                 <div class="progress-bg mb-4">
@@ -163,10 +181,10 @@ function renderGoals() {
 
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-center gap-2">
-                        <input type="date" id="date-${goal.id}" class="text-[10px] border rounded p-1 outline-none">
-                        <button onclick="logCustomDate('${goal.id}')" class="bg-purple-600 text-white text-xs px-3 py-1 rounded-full shadow-sm">Log</button>
+                        <input type="date" id="date-${goal.id}" class="text-[10px] border border-purple-100 rounded-lg p-1 outline-none">
+                        <button onclick="logCustomDate('${goal.id}')" class="bg-purple-600 text-white text-xs px-4 py-1.5 rounded-full shadow-md hover:bg-purple-700 transition">Log Success</button>
                     </div>
-                    <button onclick="deleteGoal('${goal.id}')" class="opacity-30 hover:opacity-100 transition">🗑️</button>
+                    <button onclick="deleteGoal('${goal.id}')" class="opacity-20 hover:opacity-100 transition-opacity">🗑️</button>
                 </div>
             </div>
         `;
@@ -175,8 +193,13 @@ function renderGoals() {
 
 function openEditRewardUI(goalId) {
     const goal = goals.find(g => g.id === goalId);
-    document.getElementById('edit-reward-goal-id').value = goalId;
-    document.getElementById('edit-goal-name').innerText = `Goal: ${goal.name}`;
+    if (!goal) return;
+    const goalNameEl = document.getElementById('edit-goal-name');
+    const goalIdInput = document.getElementById('edit-reward-goal-id');
+    
+    if(goalNameEl) goalNameEl.innerText = `Goal: ${goal.name}`;
+    if(goalIdInput) goalIdInput.value = goalId;
+    
     openModal('edit-reward-modal');
 }
 
@@ -185,8 +208,8 @@ function renderVisionBoard() {
     if (!grid) return;
 
     grid.innerHTML = vision.map((img, index) => `
-        <div onclick="updateVision(${index})" class="vision-slot">
-            ${img ? `<img src="${img}" alt="vision">` : `<span class="text-purple-200">✨</span>`}
+        <div onclick="updateVision(${index})" class="vision-slot shadow-sm group">
+            ${img ? `<img src="${img}" alt="vision">` : `<span class="text-purple-200 group-hover:text-purple-400 transition">✨</span>`}
         </div>
     `).join('');
 }
@@ -198,7 +221,7 @@ function renderRewards() {
     container.innerHTML = rewards.map(r => `
         <div class="glo-card flex justify-between items-center py-3 px-5 mb-2">
             <span class="text-purple-800 font-medium">🎀 ${r.name}</span>
-            <button onclick="deleteReward('${r.id}')" class="text-xs text-red-400 bg-red-50 px-2 py-1 rounded-lg">Delete</button>
+            <button onclick="deleteReward('${r.id}')" class="text-xs text-red-400 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg transition">Remove</button>
         </div>
     `).join('');
 }
