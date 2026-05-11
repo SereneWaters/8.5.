@@ -85,5 +85,11 @@ body {
     color: white;
     padding: 0.6rem 1.5rem;
     border-radius: 999px;
+
+#goals-list .flex-wrap {
+    max-width: 100%;
+    display: flex;
+    row-gap: 8px; /* Adds space if the dots wrap to a second line */
+}
     font-weight: 600;
 }
