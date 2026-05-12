@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GloApp | Becoming My Highest Self</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="index.css">
 </head>
 <body class="p-4 pb-32">
     <div class="sparkle" style="top: 15%; left: 10%;"></div>
     <div class="sparkle" style="top: 40%; left: 85%; animation-delay: 1s;"></div>
     <div class="sparkle" style="top: 70%; left: 20%; animation-delay: 2s;"></div>
-    <div class="sparkle" style="top: 85%; left: 75%; animation-delay: 0.5s;"></div>
-    <div class="sparkle" style="top: 25%; left: 50%; animation-delay: 1.5s;"></div>
 
     <header class="text-center py-8">
         <h1 class="cursive text-5xl text-purple-800 mb-1">GloApp ✨</h1>
@@ -24,62 +20,19 @@
 
     <div class="max-w-2xl mx-auto space-y-8">
         <section>
-            <div class="flex justify-between items-end mb-4 px-2">
-                <h2 class="text-2xl font-semibold">Today's Focus ☁️</h2>
-                <button onclick="openModal('goal-modal')" class="text-sm bg-purple-600 text-white px-4 py-1 rounded-full shadow-lg">+ New Goal</button>
-            </div>
+            <h2 class="text-2xl font-semibold mb-4 px-2">Today's Focus ☁️</h2>
             <div id="goals-list" class="space-y-4"></div>
         </section>
 
         <section>
             <h2 class="text-2xl font-semibold mb-4 px-2">Vision Board 🎀</h2>
-            <div id="vision-grid"></div> </section>
+            <div id="vision-grid"></div>
+        </section>
 
         <section>
-            <div class="flex justify-between items-end mb-4 px-2">
-                <h2 class="text-2xl font-semibold">Treasury 🎁</h2>
-                <button onclick="openModal('reward-modal')" class="text-sm bg-pink-500 text-white px-4 py-1 rounded-full shadow-lg">Add Reward</button>
-            </div>
+            <h2 class="text-2xl font-semibold mb-4 px-2">Treasury 🎁</h2>
             <div id="rewards-list" class="grid grid-cols-1 gap-3"></div>
         </section>
-    </div>
-
-    <div id="edit-reward-modal" class="modal p-4">
-        <div class="glo-card p-6 w-full max-w-md bg-white">
-            <h3 class="text-xl font-bold mb-4">Assign Reward 🎀</h3>
-            <p id="edit-goal-name" class="mb-4 text-sm opacity-60"></p>
-            <input type="hidden" id="edit-reward-goal-id">
-            <select id="update-reward-select" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none">
-            </select>
-            <div class="flex gap-2">
-                <button onclick="updateGoalReward()" class="flex-1 bg-purple-600 text-white py-3 rounded-xl font-bold">Save Change</button>
-                <button onclick="closeModal('edit-reward-modal')" class="flex-1 bg-slate-100 py-3 rounded-xl">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="goal-modal" class="modal p-4">
-        <div class="glo-card p-6 w-full max-w-md bg-white">
-            <h3 class="text-xl font-bold mb-4">New Ambition ✨</h3>
-            <input id="goal-name" type="text" placeholder="Goal Name" class="w-full p-3 rounded-xl border border-purple-100 mb-3 outline-none">
-            <input id="goal-duration" type="number" placeholder="Duration (Days)" class="w-full p-3 rounded-xl border border-purple-100 mb-3 outline-none">
-            <select id="goal-reward" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none"></select>
-            <div class="flex gap-2">
-                <button onclick="saveGoal()" class="flex-1 bg-purple-600 text-white py-3 rounded-xl font-bold">Create</button>
-                <button onclick="closeModal('goal-modal')" class="flex-1 bg-slate-100 py-3 rounded-xl">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="reward-modal" class="modal p-4">
-        <div class="glo-card p-6 w-full max-w-md bg-white">
-            <h3 class="text-xl font-bold mb-4">New Reward 🎁</h3>
-            <input id="reward-name" type="text" placeholder="Reward Name (e.g. Spa Day)" class="w-full p-3 rounded-xl border border-purple-100 mb-4 outline-none">
-            <div class="flex gap-2">
-                <button onclick="saveReward()" class="flex-1 bg-pink-500 text-white py-3 rounded-xl font-bold">Add</button>
-                <button onclick="closeModal('reward-modal')" class="flex-1 bg-slate-100 py-3 rounded-xl">Cancel</button>
-            </div>
-        </div>
     </div>
 
     <script src="app.js"></script>
