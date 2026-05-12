@@ -22,16 +22,15 @@ body {
     box-shadow: 0 8px 32px rgba(147, 51, 234, 0.05);
 }
 
-/* --- Vision Board (1/3 Smaller Layout) --- */
 #vision-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 cols makes them smaller */
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     padding: 8px;
 }
 
 .vision-slot {
-    aspect-ratio: 3 / 4; /* Slightly shorter Pinterest feel */
+    aspect-ratio: 3 / 4;
     border-radius: 12px;
     background: white;
     border: 1.5px dashed #d8b4fe;
@@ -43,34 +42,9 @@ body {
     transition: all 0.3s ease;
 }
 
-.vision-slot:hover {
-    border-color: #9333ea;
-    transform: scale(1.05);
-}
+.vision-slot img { width: 100%; height: 100%; object-fit: cover; }
 
-.vision-slot img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* --- Calendar Strip --- */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-.sparkle {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    background: white;
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    opacity: 0.4;
-    animation: twinkle 3s infinite ease-in-out;
-    pointer-events: none;
-    z-index: -1;
-}
-
-@keyframes twinkle {
-    0%, 100% { transform: scale(1); opacity: 0.4; }
-    50% { transform: scale(1.5); opacity: 0.7; }
-}
+.hidden { display: none; }
