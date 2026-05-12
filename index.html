@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body class="p-4 pb-32">
-    <div id="reward-banner" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md bg-pink-500 text-white p-4 rounded-2xl shadow-2xl text-center animate-bounce font-bold"></div>
+    <div id="reward-banner" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md bg-pink-500 text-white p-4 rounded-2xl shadow-2xl text-center animate-bounce font-bold border-2 border-white"></div>
 
     <header class="text-center py-8">
         <h1 class="cursive text-5xl text-purple-800 mb-1">GloApp ✨</h1>
@@ -31,9 +31,9 @@
             <h2 class="text-2xl font-semibold mb-4">Goals & Ambitions 🎯</h2>
             
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100 mb-6">
-                <input id="new-goal-name" type="text" placeholder="Goal Name (e.g., 5K Steps)" class="w-full p-2 mb-3 border-b border-purple-50 outline-none text-sm">
+                <input id="new-goal-name" type="text" placeholder="Goal Name (e.g., Read for 30 mins)" class="w-full p-2 mb-3 border-b border-purple-50 outline-none text-sm">
                 <div class="flex gap-2 mb-3">
-                    <input id="new-goal-duration" type="number" placeholder="Days" class="w-20 p-2 rounded-lg border border-purple-50 outline-none text-sm">
+                    <input id="new-goal-duration" type="number" placeholder="Consecutive Days" class="w-32 p-2 rounded-lg border border-purple-50 outline-none text-sm">
                     <select id="new-goal-reward" class="flex-1 p-2 rounded-lg border border-purple-50 outline-none text-sm bg-white"></select>
                 </div>
                 <div class="flex gap-2">
@@ -48,7 +48,7 @@
         <section>
             <div class="flex justify-between items-center mb-4 px-2">
                 <h2 class="text-2xl font-semibold">Treasury 🎁</h2>
-                <button onclick="addRewardPrompt()" class="text-xs bg-pink-400 text-white px-3 py-1 rounded-full">+ Add Reward</button>
+                <button onclick="addRewardPrompt()" class="text-xs bg-pink-400 text-white px-3 py-1 rounded-full shadow-sm">+ Add Reward</button>
             </div>
             <div id="rewards-list" class="grid grid-cols-1 gap-3"></div>
         </section>
