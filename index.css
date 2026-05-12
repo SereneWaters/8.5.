@@ -1,6 +1,4 @@
 :root {
-    --soft-purple: #f3e8ff;
-    --deep-purple: #9333ea;
     --glass: rgba(255, 255, 255, 0.85);
 }
 
@@ -26,7 +24,6 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    padding: 8px;
 }
 
 .vision-slot {
