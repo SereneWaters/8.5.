@@ -5,19 +5,22 @@ let vision = JSON.parse(localStorage.getItem('glo_vision')) || Array(9).fill(nul
 
 let viewDate = new Date(); 
 
-// --- UI Helpers ---
-function openModal(id) { 
+// --- Modal Controls ---
+window.openModal = function(id) { 
     const modal = document.getElementById(id);
     if (modal) {
         modal.classList.add('active'); 
-        if(id === 'goal-modal' || id === 'edit-reward-modal') updateRewardDropdowns();
+        // Populate dropdowns if we are opening a goal-related modal
+        if(id === 'goal-modal' || id === 'edit-reward-modal') {
+            updateRewardDropdowns();
+        }
     }
-}
+};
 
-function closeModal(id) { 
+window.closeModal = function(id) { 
     const modal = document.getElementById(id);
     if (modal) modal.classList.remove('active'); 
-}
+};
 
 function updateRewardDropdowns() {
     const selects = ['goal-reward', 'update-reward-select'];
@@ -32,7 +35,7 @@ function updateRewardDropdowns() {
 
 // --- Goal & Calendar Logic ---
 
-function saveGoal() {
+window.saveGoal = function() {
     const name = document.getElementById('goal-name').value;
     const duration = document.getElementById('goal-duration').value;
     const rewardId = document.getElementById('goal-reward').value;
@@ -49,9 +52,12 @@ function saveGoal() {
     
     saveAndRender();
     closeModal('goal-modal');
-}
+    // Reset inputs
+    document.getElementById('goal-name').value = '';
+    document.getElementById('goal-duration').value = '';
+};
 
-function setDayStatus(goalId, dateStr, status) {
+window.setDayStatus = function(goalId, dateStr, status) {
     const goal = goals.find(g => g.id === goalId);
     if (!goal) return;
 
@@ -61,7 +67,7 @@ function setDayStatus(goalId, dateStr, status) {
         goal.logs[dateStr] = status;
     }
     saveAndRender();
-}
+};
 
 function getStatusColor(status, isToday) {
     if (status === 'success') return 'bg-green-400 border-green-500 text-white';
@@ -101,7 +107,7 @@ function renderGoals() {
             dotStrip += `
                 <div class="flex flex-col items-center gap-1">
                     <div onclick="promptStatusUpdate('${goal.id}', '${dateStr}')" 
-                         class="w-7 h-7 rounded-lg border flex items-center justify-center cursor-pointer transition-all hover:shadow-md text-[10px] ${getStatusColor(status, isToday)}">
+                         class="w-8 h-8 rounded-lg border flex items-center justify-center cursor-pointer transition-all hover:shadow-md text-[11px] ${getStatusColor(status, isToday)}">
                         ${d}
                     </div>
                 </div>
@@ -112,13 +118,13 @@ function renderGoals() {
             <div class="glo-card p-5 mb-6">
                 <div class="flex justify-between items-start mb-4">
                     <div>
-                        <h3 class="font-bold text-purple-900 text-lg">${goal.name}</h3>
-                        <span onclick="openEditRewardUI('${goal.id}')" class="text-[11px] text-pink-500 cursor-pointer hover:underline">
+                        <h3 class="font-bold text-purple-900 text-lg leading-tight">${goal.name}</h3>
+                        <span onclick="openEditRewardUI('${goal.id}')" class="text-[11px] text-pink-500 cursor-pointer hover:underline italic">
                             🎁 ${rewardName}
                         </span>
                     </div>
                     <div class="text-right flex flex-col items-end">
-                        <span class="text-xs font-black text-purple-500 bg-purple-50 px-2 py-1 rounded-lg">${totalSuccess} SUCCESSES</span>
+                        <span class="text-[10px] font-black text-purple-500 bg-purple-50 px-2 py-1 rounded-lg uppercase tracking-tighter">${totalSuccess} Successes</span>
                     </div>
                 </div>
 
@@ -127,59 +133,67 @@ function renderGoals() {
                 </div>
 
                 <div class="flex justify-end mt-2">
-                    <button onclick="deleteGoal('${goal.id}')" class="text-[10px] opacity-20 hover:opacity-100 uppercase tracking-widest">Remove Goal 🗑️</button>
+                    <button onclick="deleteGoal('${goal.id}')" class="text-[10px] opacity-20 hover:opacity-100 uppercase tracking-widest transition-opacity">Remove Goal 🗑️</button>
                 </div>
             </div>
         `;
     }).join('');
 }
 
-function promptStatusUpdate(goalId, dateStr) {
+window.promptStatusUpdate = function(goalId, dateStr) {
     const choice = prompt(`Update ${dateStr}:\n1: Success ✅\n2: Fail ❌\n0: Clear ⚪`);
     if (choice === '1') setDayStatus(goalId, dateStr, 'success');
     if (choice === '2') setDayStatus(goalId, dateStr, 'fail');
     if (choice === '0') setDayStatus(goalId, dateStr, 'none');
-}
+};
 
-function changeMonth(offset) {
+window.changeMonth = function(offset) {
     viewDate.setMonth(viewDate.getMonth() + offset);
     saveAndRender();
-}
+};
 
 // --- Rewards, Vision & Persistence ---
 
-function saveReward() {
+window.saveReward = function() {
     const name = document.getElementById('reward-name').value;
     if(!name) return;
     rewards.push({ id: Date.now().toString(), name });
     saveAndRender();
     closeModal('reward-modal');
     document.getElementById('reward-name').value = '';
-}
+};
 
-function openEditRewardUI(goalId) {
+window.openEditRewardUI = function(goalId) {
     const goal = goals.find(g => g.id === goalId);
+    if(!goal) return;
     document.getElementById('edit-reward-goal-id').value = goalId;
     document.getElementById('edit-goal-name').innerText = `Goal: ${goal.name}`;
     openModal('edit-reward-modal');
-}
+};
 
-function updateGoalReward() {
+window.updateGoalReward = function() {
     const goalId = document.getElementById('edit-reward-goal-id').value;
     const rewardId = document.getElementById('update-reward-select').value;
     const goal = goals.find(g => g.id === goalId);
-    if (goal) { goal.rewardId = rewardId; saveAndRender(); closeModal('edit-reward-modal'); }
-}
+    if (goal) { 
+        goal.rewardId = rewardId; 
+        saveAndRender(); 
+        closeModal('edit-reward-modal'); 
+    }
+};
 
-function updateVision(index) {
+window.updateVision = function(index) {
     const url = prompt("Paste Pinterest Image URL:");
-    if (url) { vision[index] = url; saveAndRender(); }
-}
+    if (url) { 
+        vision[index] = url; 
+        saveAndRender(); 
+    }
+};
 
 function renderVisionBoard() {
     const grid = document.getElementById('vision-grid');
     if (grid) grid.innerHTML = vision.map((img, index) => `
-        <div onclick="updateVision(${index})" class="vision-slot border border-purple-50">
+        <div onclick="updateVision(${index})" class="vision-slot border border-purple-50 bg-white">
             ${img ? `<img src="${img}" alt="vision">` : `<span class="text-purple-200">✨</span>`}
         </div>
     `).join('');
@@ -190,13 +204,23 @@ function renderRewards() {
     if (container) container.innerHTML = rewards.map(r => `
         <div class="glo-card flex justify-between items-center py-4 px-6 mb-3">
             <span class="text-purple-800 font-bold text-sm">🎀 ${r.name}</span>
-            <button onclick="deleteReward('${r.id}')" class="text-[10px] text-red-300 uppercase font-bold hover:text-red-500">Delete</button>
+            <button onclick="deleteReward('${r.id}')" class="text-[10px] text-red-300 uppercase font-bold hover:text-red-500 transition-colors">Delete</button>
         </div>
     `).join('');
 }
 
-function deleteGoal(id) { if(confirm("Delete this goal?")) { goals = goals.filter(g => g.id !== id); saveAndRender(); } }
-function deleteReward(id) { rewards = rewards.filter(r => r.id !== id); goals.forEach(g => { if(g.rewardId === id) g.rewardId = ""; }); saveAndRender(); }
+window.deleteGoal = function(id) { 
+    if(confirm("Delete this goal?")) { 
+        goals = goals.filter(g => g.id !== id); 
+        saveAndRender(); 
+    } 
+};
+
+window.deleteReward = function(id) { 
+    rewards = rewards.filter(r => r.id !== id); 
+    goals.forEach(g => { if(g.rewardId === id) g.rewardId = ""; }); 
+    saveAndRender(); 
+};
 
 function saveAndRender() {
     localStorage.setItem('glo_goals', JSON.stringify(goals));
