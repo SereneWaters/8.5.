@@ -91,5 +91,22 @@ body {
     display: flex;
     row-gap: 8px; /* Adds space if the dots wrap to a second line */
 }
+
+/* Hide scrollbar for the calendar strip but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Pinterest Board Adjustment */
+#vision-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 10px;
+}
     font-weight: 600;
 }
