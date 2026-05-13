@@ -5,53 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GloApp | Becoming My Highest Self</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 </head>
 <body class="p-4 pb-32">
-    <div id="reward-banner" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md bg-pink-500 text-white p-4 rounded-2xl shadow-2xl text-center animate-bounce font-bold border-2 border-white"></div>
+    <!-- Cloud Background Layers -->
+    <div class="cloud-bg"></div>
+    <div class="soft-overlay"></div>
 
-    <header class="text-center py-8">
-        <h1 class="cursive text-5xl text-purple-800 mb-1">GloApp ✨</h1>
-        <p class="text-sm tracking-widest uppercase opacity-60 italic">it's already yours</p>
+    <!-- Achievement Popup -->
+    <div id="reward-banner" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md bg-white/90 text-purple-900 p-4 rounded-2xl shadow-2xl text-center animate-bounce font-serif border border-purple-200"></div>
+
+    <header class="text-center py-12">
+        <h1 class="cursive text-6xl text-purple-900 mb-2 drop-shadow-sm">GloApp</h1>
+        <p class="serif italic text-sm tracking-[0.2em] text-purple-700/70 uppercase">becoming my highest self ✨</p>
     </header>
 
-    <div class="max-w-2xl mx-auto space-y-12">
+    <div class="max-w-2xl mx-auto space-y-12 relative z-10">
+        <!-- ACTIVE HABIT TRACKER -->
         <section>
-            <h2 class="text-2xl font-semibold mb-4 px-2">Today's Focus ☁️</h2>
-            <div id="goals-list" class="space-y-4"></div>
+            <h2 class="serif text-2xl font-semibold mb-6 px-2 text-purple-900/80">Today's Focus ☁️</h2>
+            <div id="goals-list" class="space-y-6"></div>
         </section>
 
+        <!-- VISION BOARD -->
         <section>
-            <h2 class="text-2xl font-semibold mb-4 px-2">Vision Board 🎀</h2>
+            <h2 class="serif text-2xl font-semibold mb-6 px-2 text-purple-900/80">Vision Board 🎀</h2>
             <div id="vision-grid"></div>
         </section>
 
-        <section class="bg-purple-100/30 p-6 rounded-[32px] border border-purple-200/50">
-            <h2 class="text-2xl font-semibold mb-4">Goals & Ambitions 🎯</h2>
+        <!-- GOAL COMMAND CENTER -->
+        <section class="command-center p-8 rounded-[40px] border border-white/50 shadow-inner">
+            <h2 class="serif text-2xl font-semibold mb-6 text-purple-900/80">Goals & Ambitions 🎯</h2>
             
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-purple-100 mb-6">
-                <input id="new-goal-name" type="text" placeholder="Goal Name (e.g., Read for 30 mins)" class="w-full p-2 mb-3 border-b border-purple-50 outline-none text-sm">
-                <div class="flex gap-2 mb-3">
-                    <input id="new-goal-duration" type="number" placeholder="Consecutive Days" class="w-32 p-2 rounded-lg border border-purple-50 outline-none text-sm">
-                    <select id="new-goal-reward" class="flex-1 p-2 rounded-lg border border-purple-50 outline-none text-sm bg-white"></select>
+            <div class="bg-white/40 backdrop-blur-md p-6 rounded-3xl border border-white/60 mb-8">
+                <input id="new-goal-name" type="text" placeholder="Goal Title..." class="w-full bg-transparent p-2 mb-4 border-b border-purple-200 outline-none text-serif placeholder:italic">
+                <div class="flex gap-3 mb-4">
+                    <input id="new-goal-duration" type="number" placeholder="Days" class="w-24 bg-white/50 p-3 rounded-xl border border-purple-100 outline-none text-sm">
+                    <select id="new-goal-reward" class="flex-1 bg-white/50 p-3 rounded-xl border border-purple-100 outline-none text-sm appearance-none"></select>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="createNewGoal(true)" class="flex-1 bg-purple-600 text-white py-2 rounded-xl text-xs font-bold">Start Now</button>
-                    <button onclick="createNewGoal(false)" class="flex-1 bg-white border border-purple-200 text-purple-600 py-2 rounded-xl text-xs font-bold">Save for Future</button>
+                <div class="flex gap-3">
+                    <button onclick="createNewGoal(true)" class="flex-1 btn-primary py-3 rounded-2xl text-xs font-bold uppercase tracking-widest">Start Now</button>
+                    <button onclick="createNewGoal(false)" class="flex-1 btn-secondary py-3 rounded-2xl text-xs font-bold uppercase tracking-widest">Save for Future</button>
                 </div>
             </div>
 
-            <div id="future-goals-list" class="space-y-3"></div>
+            <div id="future-goals-list" class="space-y-4"></div>
         </section>
 
+        <!-- TREASURY -->
         <section>
-            <div class="flex justify-between items-center mb-4 px-2">
-                <h2 class="text-2xl font-semibold">Treasury 🎁</h2>
-                <button onclick="addRewardPrompt()" class="text-xs bg-pink-400 text-white px-3 py-1 rounded-full shadow-sm">+ Add Reward</button>
+            <div class="flex justify-between items-end mb-6 px-2">
+                <h2 class="serif text-2xl font-semibold text-purple-900/80">Treasury 🎁</h2>
+                <button onclick="addRewardPrompt()" class="text-[10px] tracking-widest uppercase bg-white/80 text-purple-600 px-4 py-2 rounded-full border border-purple-100 hover:bg-purple-50">+ Add Reward</button>
             </div>
-            <div id="rewards-list" class="grid grid-cols-1 gap-3"></div>
+            <div id="rewards-list" class="grid grid-cols-1 gap-4"></div>
         </section>
+        
+        <footer class="text-center py-10 opacity-60">
+            <p class="serif italic text-xs">You are becoming everything you dreamed of. Keep going. ✨</p>
+        </footer>
     </div>
 
     <script src="app.js"></script>
