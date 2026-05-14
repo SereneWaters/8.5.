@@ -1,28 +1,33 @@
 :root {
     --deep-purple: #4b3d61;
-    --dream-lavender: #dcd3f1;
-    --soft-cream: #f9f7f2;
-    --glass-bg: rgba(255, 255, 255, 0.4);
+    --lavender-btn: #8B80B6;
+    --soft-cream: #F9F7F2;
+    --glass: rgba(255, 255, 255, 0.45);
 }
-
-.serif { font-family: 'Lora', serif; }
-.cursive { font-family: 'Dancing Script', cursive; }
-header h1 { font-family: 'Cinzel', serif; letter-spacing: 2px; }
 
 body {
     background-color: var(--soft-cream);
     color: var(--deep-purple);
     margin: 0;
-    overflow-x: hidden;
+    min-height: 100vh;
 }
 
+.serif { font-family: 'Lora', serif; }
+.cursive { font-family: 'Dancing Script', cursive; }
+.section-title { 
+    font-family: 'Lora', serif; 
+    font-size: 1.5rem; 
+    font-weight: 600; 
+    color: rgba(75, 61, 97, 0.8);
+    margin-bottom: 1.5rem;
+}
+
+/* CORRECTED CLOUD URL */
 .cloud-bg {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-image: url('https://img.freepik.com/free-photo/view-magical-dreamy-clouds_23-2151121081.jpg');
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://img.freepik.com/free-photo/view-magical-dreamy-clouds_23-2151121081.jpg') no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
     z-index: -2;
     opacity: 0.7;
 }
@@ -30,39 +35,43 @@ body {
 .soft-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(249,247,242,0.4) 100%);
+    background: linear-gradient(to bottom, rgba(249, 247, 242, 0.2), rgba(220, 211, 241, 0.4));
     z-index: -1;
 }
 
 .glo-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(147, 128, 178, 0.1);
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 24px;
 }
 
 .command-center {
-    background: linear-gradient(180deg, rgba(220, 211, 241, 0.3) 0%, rgba(240, 228, 233, 0.3) 100%);
-    backdrop-filter: blur(8px);
+    background: linear-gradient(135deg, rgba(220, 211, 241, 0.4) 0%, rgba(240, 228, 233, 0.4) 100%);
+    backdrop-filter: blur(10px);
 }
 
-.btn-primary { background: #8b80b6; color: white; }
-.btn-secondary { background: white; color: #8b80b6; border: 1px solid #dcd3f1; }
+.glass-input-card {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
 
-#vision-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.vision-slot { aspect-ratio: 1/1; border-radius: 12px; background: white; overflow: hidden; border: 1px solid rgba(255,255,255,0.8); }
-.vision-slot img { width: 100%; height: 100%; object-fit: cover; }
+.btn-primary { background: var(--lavender-btn); color: white; }
+.btn-secondary { background: white; color: var(--lavender-btn); border: 1px solid rgba(139, 128, 182, 0.2); }
 
 .calendar-dot {
-    width: 2.2rem; height: 2.2rem; border-radius: 50%;
-    font-family: 'Lora', serif; font-size: 11px;
-    display: flex; align-items: center; justify-content: center;
+    width: 2.4rem; height: 2.4rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 12px;
 }
 
-.success-dot { background-color: #d1e7bc; border: 1px solid #b8d697; color: #4b6b2f; }
-.fail-dot { background-color: #f7dadd; border: 1px solid #eab8bc; color: #8b4b4e; }
-.today-dot { border: 2px solid #8b80b6; color: #8b80b6; font-weight: bold; background: white; }
+.success-dot { background-color: #D1E7BC; color: #4B6B2F; border: 1px solid #B8D697; }
+.fail-dot { background-color: #F7DADD; color: #8B4B4E; border: 1px solid #EAB8BC; }
+.today-dot { border: 2px solid var(--lavender-btn); color: var(--lavender-btn); background: white; font-weight: bold; }
+
+#vision-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.vision-slot { aspect-ratio: 1/1; border-radius: 15px; background: white; border: 1px solid rgba(255,255,255,0.8); overflow: hidden; }
+.vision-slot img { width: 100%; height: 100%; object-fit: cover; }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .hidden { display: none; }
