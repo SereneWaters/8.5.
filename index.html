@@ -9,11 +9,9 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body class="p-4 pb-32">
-    <!-- Cloud Background Layers -->
     <div class="cloud-bg"></div>
     <div class="soft-overlay"></div>
 
-    <!-- Achievement Popup -->
     <div id="reward-banner" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md bg-white/90 text-purple-900 p-4 rounded-2xl shadow-2xl text-center animate-bounce font-serif border border-purple-200"></div>
 
     <header class="text-center py-12">
@@ -22,7 +20,7 @@
     </header>
 
     <div class="max-w-2xl mx-auto space-y-12 relative z-10">
-        <!-- ACTIVE HABIT TRACKER -->
+        <!-- TODAY'S FOCUS -->
         <section>
             <h2 class="serif text-2xl font-semibold mb-6 px-2 text-purple-900/80">Today's Focus ☁️</h2>
             <div id="goals-list" class="space-y-6"></div>
@@ -39,7 +37,7 @@
             <h2 class="serif text-2xl font-semibold mb-6 text-purple-900/80">Goals & Ambitions 🎯</h2>
             
             <div class="bg-white/40 backdrop-blur-md p-6 rounded-3xl border border-white/60 mb-8">
-                <input id="new-goal-name" type="text" placeholder="Goal Title..." class="w-full bg-transparent p-2 mb-4 border-b border-purple-200 outline-none text-serif placeholder:italic">
+                <input id="new-goal-name" type="text" placeholder="Goal Title..." class="w-full bg-transparent p-2 mb-4 border-b border-purple-200 outline-none serif placeholder:italic">
                 <div class="flex gap-3 mb-4">
                     <input id="new-goal-duration" type="number" placeholder="Days" class="w-24 bg-white/50 p-3 rounded-xl border border-purple-100 outline-none text-sm">
                     <select id="new-goal-reward" class="flex-1 bg-white/50 p-3 rounded-xl border border-purple-100 outline-none text-sm appearance-none"></select>
