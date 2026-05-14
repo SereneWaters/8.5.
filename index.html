@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GloApp | Becoming My Highest Self</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts matching 1000108466_2.png -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <!-- This MUST match your file name exactly -->
     <link rel="stylesheet" href="index.css">
 </head>
 <body class="serif">
@@ -21,22 +21,18 @@
     </header>
 
     <main class="max-w-2xl mx-auto px-4 space-y-12 relative z-10">
-        <!-- CALENDAR TRACKER -->
         <section>
             <h2 class="section-title">Today's Focus ☁️</h2>
             <div id="goals-list" class="space-y-6"></div>
         </section>
 
-        <!-- VISION BOARD -->
         <section>
             <h2 class="section-title">Vision Board 🎀</h2>
             <div id="vision-grid"></div>
         </section>
 
-        <!-- COMMAND CENTER -->
         <section class="command-center p-8 rounded-[40px] border border-white/50 shadow-xl">
             <h2 class="section-title !text-purple-900">Goals & Ambitions 🎯</h2>
-            
             <div class="glass-input-card p-6 rounded-3xl mb-8">
                 <input id="new-goal-name" type="text" placeholder="Goal Title..." class="w-full bg-transparent p-2 mb-4 border-b border-purple-200 outline-none placeholder:italic text-purple-900">
                 <div class="flex gap-3 mb-4">
@@ -48,11 +44,9 @@
                     <button onclick="createNewGoal(false)" class="btn-secondary flex-1 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest">Save for Future</button>
                 </div>
             </div>
-
             <div id="future-goals-list" class="space-y-4"></div>
         </section>
 
-        <!-- REWARDS -->
         <section>
             <div class="flex justify-between items-end mb-6">
                 <h2 class="section-title">Treasury 🎁</h2>
@@ -60,10 +54,6 @@
             </div>
             <div id="rewards-list" class="grid grid-cols-1 gap-4"></div>
         </section>
-        
-        <footer class="text-center py-10 opacity-40">
-            <p class="italic text-xs">"Discipline today, freedom tomorrow." ✨</p>
-        </footer>
     </main>
 
     <script src="app.js"></script>
