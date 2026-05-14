@@ -2,11 +2,9 @@
     --deep-purple: #4b3d61;
     --dream-lavender: #dcd3f1;
     --soft-cream: #f9f7f2;
-    --accent-pink: #f0e4e9;
     --glass-bg: rgba(255, 255, 255, 0.4);
 }
 
-/* Typography from 1000108466_2.png */
 .serif { font-family: 'Lora', serif; }
 .cursive { font-family: 'Dancing Script', cursive; }
 header h1 { font-family: 'Cinzel', serif; letter-spacing: 2px; }
@@ -16,16 +14,11 @@ body {
     color: var(--deep-purple);
     margin: 0;
     overflow-x: hidden;
-    line-height: 1.6;
 }
 
-/* Cloud Background as seen in 1000108466_2.png */
 .cloud-bg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: url('https://img.freepik.com/free-photo/view-magical-dreamy-clouds_23-2151121081.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -2;
@@ -34,23 +27,17 @@ body {
 
 .soft-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(249,247,242,0.4) 100%);
     z-index: -1;
 }
 
-/* Glassmorphism Cards */
 .glo-card {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(147, 128, 178, 0.1);
-    transition: transform 0.3s ease;
 }
 
 .command-center {
@@ -58,60 +45,22 @@ body {
     backdrop-filter: blur(8px);
 }
 
-/* Buttons */
-.btn-primary {
-    background: #8b80b6; /* Lavender from the 'Add Goal' button in the image */
-    color: white;
-    box-shadow: 0 4px 15px rgba(139, 128, 182, 0.3);
-    transition: opacity 0.2s;
-}
+.btn-primary { background: #8b80b6; color: white; }
+.btn-secondary { background: white; color: #8b80b6; border: 1px solid #dcd3f1; }
 
-.btn-secondary {
-    background: white;
-    color: #8b80b6;
-    border: 1px solid #dcd3f1;
-}
+#vision-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.vision-slot { aspect-ratio: 1/1; border-radius: 12px; background: white; overflow: hidden; border: 1px solid rgba(255,255,255,0.8); }
+.vision-slot img { width: 100%; height: 100%; object-fit: cover; }
 
-.btn-primary:hover { opacity: 0.9; }
-
-/* Vision Board */
-#vision-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-}
-
-.vision-slot {
-    aspect-ratio: 1 / 1;
-    border-radius: 12px;
-    background: white;
-    border: 1px solid rgba(255,255,255,0.8);
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-}
-
-.vision-slot img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover;
-    filter: brightness(1.05) contrast(0.95); /* Dreamy filter */
-}
-
-/* Calendar Dots */
 .calendar-dot {
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%; /* Circles as seen in 1000108466_2.png */
-    font-family: 'Lora', serif;
-    font-size: 11px;
-    transition: all 0.2s;
+    width: 2.2rem; height: 2.2rem; border-radius: 50%;
+    font-family: 'Lora', serif; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
 }
 
-.success-dot { background-color: #d1e7bc; border: 1px solid #b8d697; color: #4b6b2f; } /* Green from image */
-.fail-dot { background-color: #f7dadd; border: 1px solid #eab8bc; color: #8b4b4e; } /* Red from image */
+.success-dot { background-color: #d1e7bc; border: 1px solid #b8d697; color: #4b6b2f; }
+.fail-dot { background-color: #f7dadd; border: 1px solid #eab8bc; color: #8b4b4e; }
 .today-dot { border: 2px solid #8b80b6; color: #8b80b6; font-weight: bold; background: white; }
 
-/* Custom Scrollbar for horizontal dots */
 .no-scrollbar::-webkit-scrollbar { display: none; }
-
 .hidden { display: none; }
